@@ -6,7 +6,7 @@
 /*   By: jprofit <jprofit@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/29 16:46:22 by jprofit           #+#    #+#             */
-/*   Updated: 2022/11/30 17:31:04 by jprofit          ###   ########.fr       */
+/*   Updated: 2022/12/01 10:25:04 by jprofit          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 # include <fcntl.h>
 # include <stdio.h> ////////////////////////////
 
-char	*ft_strjoin(char const *s1, char const *s2);
+char	*ft_strjoin(char *s1, char const *s2);
 char	*get_next_line(int fd);
 
 #endif

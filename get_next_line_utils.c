@@ -6,7 +6,7 @@
 /*   By: jprofit <jprofit@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/29 16:46:07 by jprofit           #+#    #+#             */
-/*   Updated: 2022/11/30 17:47:08 by jprofit          ###   ########.fr       */
+/*   Updated: 2022/12/01 18:48:16 by jprofit          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,21 @@ size_t	ft_strlen(const char *s)
 	return (i);
 }
 
-char	*ft_strjoin(char const *s1, char const *s2)
+void	ft_bzero(void *s, size_t n)
+{
+	size_t	i;
+	char	*str;
+
+	i = 0;
+	str = (char *)s;
+	while (i < n)
+	{
+		str[i] = '\0';
+		i++;
+	}
+}
+
+char	*ft_strjoin(char *s1, char const *s2)
 {
 	size_t	len;
 	char	*str;
@@ -40,11 +54,12 @@ char	*ft_strjoin(char const *s1, char const *s2)
 		i++;
 	}
 	j = 0;
-	while (s2[j])
+	while (s2[j] && s2[j - 1] != '\n')
 	{
 		str[i + j] = s2[j];
 		j++;
 	}
 	str[i + j] = '\0';
+	free(s1);
 	return (str);
 }
