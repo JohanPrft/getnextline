@@ -6,7 +6,7 @@
 /*   By: jprofit <jprofit@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/29 16:45:49 by jprofit           #+#    #+#             */
-/*   Updated: 2022/12/01 19:13:01 by jprofit          ###   ########.fr       */
+/*   Updated: 2022/12/02 18:56:57 by jprofit          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,25 +17,12 @@
 
 #include "get_next_line.h"
 
-
-int	endlinebuff(char *str)
+int	endlinestr(char *str)
 {
 	size_t	i;
 
-	i = 0;
-	while (i < BUFFER_SIZE)
-	{
-		if (str[i] == '\n')
-			return (1);
-		i++;
-	}
-	return (0);
-}
-
-int	endlinestach(char *str)
-{
-	size_t	i;
-
+	if (str == NULL)
+		return (0);
 	i = 0;
 	while (str[i] != '\0')
 	{
@@ -49,68 +36,91 @@ int	endlinestach(char *str)
 void	trim_buff(char *buff)
 {
 	size_t	i;
+	size_t	j;
 
 	i = 0;
-	while (buff[i] != '\n' && i < BUFFER_SIZE - 1)
+	while (buff[i] != '\n')
+		i++;
+	i++;
+	j = 0;
+	while (i < BUFFER_SIZE)
 	{
-		buff[i] = '\0';
+		buff[j] = buff[i];
+		j++;
 		i++;
 	}
-	buff[i] = '\0';
 }
 
-char	*get_next_line(int fd)
+char	*get_strbuff(char	*buff)
 {
-	static char	buff[BUFFER_SIZE];
-	char		*stach;
-	size_t		i;
+	int		i;
+	char	*str;
 
-	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, buff, 0) < 0)
-		return (NULL);
-	stach = malloc(0);
-	if (!stach)
-		return (NULL);
 	i = 0;
-	while (buff[i] == '\0' && i < BUFFER_SIZE)
+	while (buff[i] != '\n')
 		i++;
-	if (i != BUFFER_SIZE)
-		stach = ft_strjoin(stach, &buff[i]);
-	while (!endlinestach(stach))
+	i++;
+	str = malloc(sizeof(*str) * (i + 1));
+	i = 0;
+	while (buff[i] != '\n')
 	{
-		if (read(fd, buff, BUFFER_SIZE) != BUFFER_SIZE)
-			return (NULL);
-		stach = ft_strjoin(stach, buff);
+		str[i] = buff[i];
+		i++;
 	}
-	if (endlinebuff(buff))
-		trim_buff(buff);
-	return (stach);
+	str[i] = buff[i];
+	i++;
+	str[i] = '\0';
+	trim_buff(buff);
+	return (str);
 }
 
 char	*get_next_line(int fd)
 {
 // declarations
-	static char	*buff;
+	static char	buff[BUFFER_SIZE + 1];
 	char 		*stach;
-	size_t		i;
 
 // initialisation
-	buff = malloc(1);
-	if (!buff)
-		return (NULL);
+	stach = NULL;
 
 // verifier les parametres et autres
 	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, stach, 0))
-		return (NULL)
-// chaine de renvoi stach
-
-// si buff non vide faire une premiere copie a partir de l'ancien \n
-
-// lire dans le fichier
-
-// copier ce qui a ete lu jusqua tomber sur un '\n'
-
-// dans buff remplacer ce qui est jusquau \n par \0
-
+		return (NULL);
+// si \n dans buff return
+	if (endlinestr(buff))
+		return (get_strbuff(buff));
+// si buff n'est pas vide
+	if (buff[0] != '\0')
+		stach = ft_strjoin(stach, buff);
+// tant qu'il n'y a pas de /n dans stach copier ce qui a ete lu
+	while (!(endlinestr(stach)))
+	{
+		// tcheck read pour fin de fichier
+		if (read(fd, buff, BUFFER_SIZE) != BUFFER_SIZE)
+			return(NULL);
+		stach = ft_strjoin(stach, buff);
+	}
+//  modif buffer, deplacer apres le /n au debut (y compris le '\0')
+	trim_buff(buff);
 // renvoyer la stach qui contient une ligne finissant par \n
+	return (stach);
 }
 
+int	main(void)
+{
+	int	fd;
+	char *s;
+	int	i;
+
+	fd = open("haddock.txt", O_RDONLY);
+	s = get_next_line(fd);
+	i = 0;
+	while (s != NULL && i < 5)
+	{
+		printf("%s", s);
+		free (s);
+		s = get_next_line(fd);
+		i++;
+	}
+	return (0);
+}

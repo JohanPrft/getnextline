@@ -6,7 +6,7 @@
 /*   By: jprofit <jprofit@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/29 16:46:07 by jprofit           #+#    #+#             */
-/*   Updated: 2022/12/01 18:48:16 by jprofit          ###   ########.fr       */
+/*   Updated: 2022/12/02 17:37:50 by jprofit          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ size_t	ft_strlen(const char *s)
 	size_t	i;
 
 	i = 0;
+	if (s == NULL)
+		return (0);
 	while (s[i])
 		i++;
 	return (i);
@@ -48,10 +50,13 @@ char	*ft_strjoin(char *s1, char const *s2)
 	if (str == 0)
 		return (NULL);
 	i = 0;
-	while (s1[i])
+	if (s1 != NULL)
 	{
-		str[i] = s1[i];
-		i++;
+		while (s1[i])
+		{
+			str[i] = s1[i];
+			i++;
+		}
 	}
 	j = 0;
 	while (s2[j] && s2[j - 1] != '\n')
