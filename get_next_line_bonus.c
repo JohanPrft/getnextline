@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jprofit <jprofit@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/29 16:45:49 by jprofit           #+#    #+#             */
-/*   Updated: 2022/12/05 18:20:57 by jprofit          ###   ########.fr       */
+/*   Created: 2022/12/05 17:40:02 by jprofit           #+#    #+#             */
+/*   Updated: 2022/12/05 18:13:42 by jprofit          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 int	endlinestr(char *str)
 {
@@ -103,43 +103,21 @@ char	*make_stach(int fd, char buff[BUFFER_SIZE + 1], char *stach)
 
 char	*get_next_line(int fd)
 {
-	static char	buff[BUFFER_SIZE + 1];
+	static char	buff[OPEN_MAX][BUFFER_SIZE + 1];
 	char		*stach;
 
 	stach = NULL;
 	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, stach, 0))
 	{
 		if (fd >= 0)
-			ft_bzero(buff, BUFFER_SIZE);
+			ft_bzero(buff[fd], BUFFER_SIZE);
 		return (NULL);
 	}
-	if (endlinestr(buff))
-		return (get_strbuff(buff));
-	if (buff[0] != '\0')
-		stach = ft_strjoin(stach, buff);
-	stach = make_stach(fd, buff, stach);
-	trim_buff(buff);
+	if (endlinestr(buff[fd]))
+		return (get_strbuff(buff[fd]));
+	if (buff[fd][0] != '\0')
+		stach = ft_strjoin(stach, buff[fd]);
+	stach = make_stach(fd, buff[fd], stach);
+	trim_buff(buff[fd]);
 	return (stach);
-}
-
-#include <stdio.h>
-#include <fcntl.h>
-
-int	main(void)
-{
-	int	fd;
-	char *s;
-	int	i;
-
-	fd = open("txt_test/haddock.txt", O_RDONLY);
-	s = get_next_line(fd);
-	i = 0;
-	while (s != NULL)
-	{
-		printf("%s", s);
-		free(s);
-		s = get_next_line(fd);
-		i++;
-	}
-	return (0);
 }
