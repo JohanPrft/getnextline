@@ -6,7 +6,7 @@
 /*   By: jprofit <jprofit@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/29 16:45:49 by jprofit           #+#    #+#             */
-/*   Updated: 2022/12/02 18:56:57 by jprofit          ###   ########.fr       */
+/*   Updated: 2022/12/05 11:13:48 by jprofit          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ void	trim_buff(char *buff)
 		j++;
 		i++;
 	}
+	buff[j] = '\0';
 }
 
 char	*get_strbuff(char	*buff)
@@ -96,7 +97,7 @@ char	*get_next_line(int fd)
 	while (!(endlinestr(stach)))
 	{
 		// tcheck read pour fin de fichier
-		if (read(fd, buff, BUFFER_SIZE) != BUFFER_SIZE)
+		if (read(fd, buff, BUFFER_SIZE) == 0)
 			return(NULL);
 		stach = ft_strjoin(stach, buff);
 	}
@@ -106,21 +107,22 @@ char	*get_next_line(int fd)
 	return (stach);
 }
 
-int	main(void)
-{
-	int	fd;
-	char *s;
-	int	i;
+// int	main(void)
+// {
+// 	int	fd;
+// 	char *s;
+// 	int	i;
 
-	fd = open("haddock.txt", O_RDONLY);
-	s = get_next_line(fd);
-	i = 0;
-	while (s != NULL && i < 5)
-	{
-		printf("%s", s);
-		free (s);
-		s = get_next_line(fd);
-		i++;
-	}
-	return (0);
-}
+// 	fd = open("41_no_nl.txt", O_RDONLY);
+// 	printf("%i\n", fd);
+// 	s = get_next_line(fd);
+// 	i = 0;
+// 	while (s != NULL)
+// 	{
+// 		printf("%s", s);
+// 		free(s);
+// 		s = get_next_line(fd);
+// 		i++;
+// 	}
+// 	return (0);
+// }
